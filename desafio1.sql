@@ -9,30 +9,34 @@ DROP DATABASE IF EXISTS SpotifyClone;
   PRIMARY KEY (id_plane))
   ENGINE = InnoDB;
 
+CREATE TABLE SpotifyClone.history (
+  id_history INT NOT NULL AUTO_INCREMENT,
+  id_user INT NOT NULL,
+  id_musics INT NOT NULL,
+  history_date DATETIME NOT NULL,
+  CONSTRAINT PRIMARY KEY (id_user, id_musics),
+    FOREIGN KEY (id_musics)
+    REFERENCES SpotifyClone.music (id_music))
+    FOREIGN KEY (id_user)
+    REFERENCES SpotifyClone.user (id_user)
+ENGINE = InnoDB;
+
   CREATE TABLE SpotifyClone.user (
   id_user INT NOT NULL AUTO_INCREMENT,
   user VARCHAR(45) NOT NULL,
   user_age INT NOT NULL,
   id_plane INT NOT NULL,
   PRIMARY KEY (id_user),
-  INDEX plane_id_idx (id_plane ASC) VISIBLE,
-  CONSTRAINT plane_id
     FOREIGN KEY (id_plane)
-    REFERENCES SpotifyClone.plane (id_plane)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES SpotifyClone.plane (id_plane))
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.artist (
   id_artist INT NOT NULL AUTO_INCREMENT,
   artist_name VARCHAR(45) NOT NULL,
   PRIMARY KEY (id_artist),
-  INDEX id_album_idx (id_albuns ASC) VISIBLE,
-  CONSTRAINT id_album
     FOREIGN KEY (id_albuns)
-    REFERENCES SpotifyClone.album (id_album)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES SpotifyClone.album (id_album))
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.album (
@@ -41,12 +45,8 @@ ENGINE = InnoDB;
   id_artist INT NOT NULL,
   realease_date INT NOT NULL,
   PRIMARY KEY (id_album),
-  INDEX id_artist_idx (id_artist ASC) VISIBLE,
-  CONSTRAINT id_artist
     FOREIGN KEY (id_artist)
-    REFERENCES SpotifyClone.artist (id_artist)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES SpotifyClone.artist (id_artist))
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.music (
@@ -56,60 +56,24 @@ ENGINE = InnoDB;
   id_artist INT NOT NULL,
   id_album INT NOT NULL,
   PRIMARY KEY (id_music),
-  INDEX album_idx (id_album ASC) VISIBLE,
-  INDEX artistista_idx (id_artist ASC) VISIBLE,
-  CONSTRAINT album
     FOREIGN KEY (id_album)
-    REFERENCES SpotifyClone.album (id_album)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT artistista
+    REFERENCES SpotifyClone.album (id_album),
     FOREIGN KEY (id_artist)
-    REFERENCES SpotifyClone.artist (id_artist)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES SpotifyClone.artist (id_artist))
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.follow_artist (
   id_follower INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
   id_artist INT,
-  PRIMARY KEY (id_follower),
-  INDEX Id_user_idx (id_user ASC) VISIBLE,
-  INDEX fk_follow_artist_1_idx (id_artist ASC) VISIBLE,
-  CONSTRAINT Id_user
+  CONSTRAINT PRIMARY KEY (id_user, id_artist),
     FOREIGN KEY (id_user)
     REFERENCES SpotifyClone.user (id_user)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_follow_artist_1
     FOREIGN KEY (id_artist)
-    REFERENCES SpotifyClone.artist (id_artist)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES SpotifyClone.artist (id_artist))
 ENGINE = InnoDB;
 
-CREATE TABLE SpotifyClone.history (
-  id_history INT NOT NULL AUTO_INCREMENT,
-  id_user INT NOT NULL,
-  id_musics INT NOT NULL,
-  history_date DATETIME NOT NULL,
-  PRIMARY KEY (id_history),
-  INDEX fk_history_1_idx (id_musics ASC) VISIBLE,
-  INDEX Id_user2_idx (id_user ASC) VISIBLE,
-  CONSTRAINT fk_history_1
-    FOREIGN KEY (id_musics)
-    REFERENCES SpotifyClone.music (id_music)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-  CONSTRAINT Id_user2
-    FOREIGN KEY (id_user)
-    REFERENCES SpotifyClone.user (id_user)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-ENGINE = InnoDB;
-
-  INSERT INTO SpotifyClone.plane (id_plane, plane_type, plane_value)
+  INSERT INTO SpotifyClone.plane (plane_type, plane_value)
   VALUES
     (1, 'gratuito', 0,00),
     (2, 'familiar', 7,99),
@@ -162,38 +126,38 @@ ENGINE = InnoDB;
     (9, 'The Bard’s Song', 244, 5, 7),
     (10, 'Feeling Good', 100, 6, 8);
 
-  INSERT INTO SpotifyClone.follow_artist  (id_follower, id_user, id_artist)
+  INSERT INTO SpotifyClone.follow_artist  (id_user, id_artist)
   VALUES
-    (1, 1, 1),
-    (2, 1, 2),
-    (3, 1, 3),
-    (4, 2, 1),
-    (5, 2, 3),
-    (6, 3, 2),
-    (7, 4, 4),
-    (8, 5, 5),
-    (9, 5, 6),
-    (10, 6, NULL),
-    (11, 7, 6),
-    (12, 8, NULL),
-    (13, 9, 3),
-    (14, 10, NULL);
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (2, 1),
+    (2, 3),
+    (3, 2),
+    (4, 4),
+    (5, 5),
+    (5, 6),
+    (6, NULL),
+    (7, 6),
+    (8, NULL),
+    (9, 3),
+    (10, NULL);
 
-      INSERT INTO SpotifyClone.follow_artist  (id_history, id_user, id_musics, history_date)
+  INSERT INTO SpotifyClone.history  (id_user, id_musics, history_date)
   VALUES
-    (1, 1, 8, '2022-02-28 10:45:55'),
-    (2, 1, 2, '2020-05-02 05:30:35'),
-    (3, 1, 10, '2020-03-06 11:22:33'),
-    (4, 2, 10, '2022-08-05 08:05:17'),
-    (5, 2, 7, '2020-01-02 07:40:33'),
-    (6, 3, 10, '2020-11-13 16:55:13'),
-    (7, 3, 2, '2020-12-05 18:38:30'),
-    (8, 4, 8, '2021-08-15 17:10:10'),
-    (9, 5, 8, '2022-01-09 01:44:33'),
-    (10, 5, 5, '2020-08-06 15:23:43'),
-    (11, 6, 7, '2017-01-24 00:31:17'),
-    (12, 6, 1, '2017-10-12 12:35:20'),
-    (13, 7, 4, '2011-12-15 22:30:49'),
-    (14, 8, 4, '2012-03-17 14:56:41'),
-    (15, 9, 9, '2022-02-24 21:14:22'),
-    (16, 10, 3, '2015-12-13 08:30:22');
+    (1, 8, '2022-02-28 10:45:55'),
+    (1, 2, '2020-05-02 05:30:35'),
+    (1, 10, '2020-03-06 11:22:33'),
+    (2, 10, '2022-08-05 08:05:17'),
+    (2, 7, '2020-01-02 07:40:33'),
+    (3, 10, '2020-11-13 16:55:13'),
+    (3, 2, '2020-12-05 18:38:30'),
+    (4, 8, '2021-08-15 17:10:10'),
+    (5, 8, '2022-01-09 01:44:33'),
+    (5, 5, '2020-08-06 15:23:43'),
+    (6, 7, '2017-01-24 00:31:17'),
+    (6, 1, '2017-10-12 12:35:20'),
+    (7, 4, '2011-12-15 22:30:49'),
+    (8, 4, '2012-03-17 14:56:41'),
+    (9, 9, '2022-02-24 21:14:22'),
+    (10, 3, '2015-12-13 08:30:22');
