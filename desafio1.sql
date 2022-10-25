@@ -10,15 +10,14 @@ DROP DATABASE IF EXISTS SpotifyClone;
   ENGINE = InnoDB;
 
 CREATE TABLE SpotifyClone.history (
-  id_history INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
   id_musics INT NOT NULL,
   history_date DATETIME NOT NULL,
   CONSTRAINT PRIMARY KEY (id_user, id_musics),
     FOREIGN KEY (id_musics)
-    REFERENCES SpotifyClone.music (id_music))
+    REFERENCES SpotifyClone.music (id_music),
     FOREIGN KEY (id_user)
-    REFERENCES SpotifyClone.user (id_user)
+    REFERENCES SpotifyClone.user (id_user))
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.user (
@@ -26,6 +25,7 @@ ENGINE = InnoDB;
   user VARCHAR(45) NOT NULL,
   user_age INT NOT NULL,
   id_plane INT NOT NULL,
+  join_date DATE,
   PRIMARY KEY (id_user),
     FOREIGN KEY (id_plane)
     REFERENCES SpotifyClone.plane (id_plane))
@@ -63,17 +63,16 @@ ENGINE = InnoDB;
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.follow_artist (
-  id_follower INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
   id_artist INT,
   CONSTRAINT PRIMARY KEY (id_user, id_artist),
     FOREIGN KEY (id_user)
-    REFERENCES SpotifyClone.user (id_user)
+    REFERENCES SpotifyClone.user (id_user),
     FOREIGN KEY (id_artist)
     REFERENCES SpotifyClone.artist (id_artist))
 ENGINE = InnoDB;
 
-  INSERT INTO SpotifyClone.plane (plane_type, plane_value)
+  INSERT INTO SpotifyClone.plane (id_plane, plane_type, plane_value)
   VALUES
     (1, 'gratuito', 0,00),
     (2, 'familiar', 7,99),
@@ -93,7 +92,7 @@ ENGINE = InnoDB;
     (9, 'Judith Butler', 45, 4, '2020-05-13'),
     (10, 'Jorge Amado', 58, 4, '2017-02-17');
 
-      INSERT INTO SpotifyClone.artist (id_artist, artist_name)
+  INSERT INTO SpotifyClone.artist (id_artist, artist_name)
   VALUES
     (1, 'Beyoncé'),
     (2, 'Queen'),
