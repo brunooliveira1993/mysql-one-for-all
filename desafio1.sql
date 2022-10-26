@@ -5,20 +5,10 @@ DROP DATABASE IF EXISTS SpotifyClone;
   CREATE TABLE SpotifyClone.plane (
   id_plane INT NOT NULL AUTO_INCREMENT,
   plane_type VARCHAR(45) NOT NULL,
-  plane_value DECIMAL NOT NULL,
+  plane_value DECIMAL(5,2) NOT NULL,
   PRIMARY KEY (id_plane))
   ENGINE = InnoDB;
 
-CREATE TABLE SpotifyClone.history (
-  id_user INT NOT NULL,
-  id_musics INT NOT NULL,
-  history_date DATETIME NOT NULL,
-  CONSTRAINT PRIMARY KEY (id_user, id_musics),
-    FOREIGN KEY (id_musics)
-    REFERENCES SpotifyClone.music (id_music),
-    FOREIGN KEY (id_user)
-    REFERENCES SpotifyClone.user (id_user))
-ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.user (
   id_user INT NOT NULL AUTO_INCREMENT,
@@ -34,9 +24,7 @@ ENGINE = InnoDB;
   CREATE TABLE SpotifyClone.artist (
   id_artist INT NOT NULL AUTO_INCREMENT,
   artist_name VARCHAR(45) NOT NULL,
-  PRIMARY KEY (id_artist),
-    FOREIGN KEY (id_albuns)
-    REFERENCES SpotifyClone.album (id_album))
+  PRIMARY KEY (id_artist))
 ENGINE = InnoDB;
 
   CREATE TABLE SpotifyClone.album (
@@ -62,6 +50,17 @@ ENGINE = InnoDB;
     REFERENCES SpotifyClone.artist (id_artist))
 ENGINE = InnoDB;
 
+CREATE TABLE SpotifyClone.history (
+  id_user INT NOT NULL,
+  id_musics INT NOT NULL,
+  history_date DATETIME NOT NULL,
+  CONSTRAINT PRIMARY KEY (id_user, id_musics),
+    FOREIGN KEY (id_musics)
+    REFERENCES SpotifyClone.music (id_music),
+    FOREIGN KEY (id_user)
+    REFERENCES SpotifyClone.user (id_user))
+ENGINE = InnoDB;
+
   CREATE TABLE SpotifyClone.follow_artist (
   id_user INT NOT NULL,
   id_artist INT,
@@ -74,10 +73,10 @@ ENGINE = InnoDB;
 
   INSERT INTO SpotifyClone.plane (id_plane, plane_type, plane_value)
   VALUES
-    (1, 'gratuito', 0,00),
-    (2, 'familiar', 7,99),
-    (3, 'universitário', 5,99),
-    (4, 'pessoal', 6,99);
+    (1, 'gratuito', 0.00),
+    (2, 'familiar', 7.99),
+    (3, 'universitário', 5.99),
+    (4, 'pessoal', 6.99);
 
   INSERT INTO SpotifyClone.user (id_user, user, user_age, id_plane, join_date)
   VALUES
@@ -136,11 +135,11 @@ ENGINE = InnoDB;
     (4, 4),
     (5, 5),
     (5, 6),
-    (6, NULL),
+    (6, 6),
+    (6, 1),
     (7, 6),
-    (8, NULL),
     (9, 3),
-    (10, NULL);
+    (10, 2);
 
   INSERT INTO SpotifyClone.history  (id_user, id_musics, history_date)
   VALUES
