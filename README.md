@@ -13,6 +13,7 @@
 
   - Individual
   - `1` dia de projeto.
+  - Porcentagem de requisitos entregues 100%
 
 </details>
 
